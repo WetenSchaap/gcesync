@@ -6,17 +6,17 @@ This small script downloads gpx files from Garmin using [garmin-connect-export](
 ```
 /root
     |-/Walking
-    |   |-<yyyy-mm-dd>_Walking-<location>.gpx
-    |   |-<yyyy-mm-dd>_Walking-<location>.gpx
-    |   |-<yyyy-mm-dd>_Walking-<location>.gpx
+    |   |-/<yyyy-mm-dd>_<activity name>.gpx
+    |   |-/<yyyy-mm-dd>_<activity name>.gpx
+    |   |-/<yyyy-mm-dd>_<activity name>.gpx
     |
     |-/Cycling
-    |   |-<yyyy-mm-dd>_Cycling-<location>.gpx
-    |   |-<yyyy-mm-dd>_Cycling-<location>.gpx
-    |   |-<yyyy-mm-dd>_Cycling-<location>.gpx
+    |   |-/<yyyy-mm-dd>_<activity name>.gpx
+    |   |-/etc...
     |
     |-/etc...
 ```
+`<activity name>` is whatever the activity is called in the Garmin cloud, typically the location and activity, e.g. `amsterdam-walking`.
 
 ## Typical use
 Run this script every week using cron to keep an offline copy of the gpx files.
