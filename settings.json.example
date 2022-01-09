@@ -1,0 +1,9 @@
+{
+    "gce_location" : "../garmin-connect-export",
+    "username" : "garmin@example.com",
+    "password" : "hunter2",
+    "maxdownloads" : "10",
+    "gpxtrack_folder" : "./gpxtrack",
+    "use_persistent_garminidlist" : false,
+    "persistent_garminids" : "./used_ids.json"
+}
