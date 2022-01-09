@@ -152,6 +152,7 @@ cython_debug/
 #.idea/
 
 ### For this small project ###
+temp/
 gpxtrack/
 gcexport.log
 settings.json

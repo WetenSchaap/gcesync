@@ -93,24 +93,30 @@ with tempfile.TemporaryDirectory() as downloaddir:
     ]
     gcexport.main( command_line_arguments )
 
-    # Now, we want to look what files we have, fortunately there is a csv file with the data I want
+    # Now, we want to see what files we have, fortunately there is a csv file with the data I need
     print("Now handling downloaded GPXfiles")
     gpxfiles = glob.glob( os.path.join(downloaddir, tracksubdir,"*.gpx") )
-    data = pd.read_csv( os.path.join(downloaddir, "activities.csv") )
+    activities = pd.read_csv( os.path.join(downloaddir, "activities.csv") )
 
-    for idx, row in data.iterrows():
-        filepath = [i for i in gpxfiles if (str(row["Activity ID"]) in i)][0]
-        add_garminID_gpx(filepath,str(row["Activity ID"]))
-        activity_name = row["Activity Type"]
-        if activity_name == "Hiking": # I think this is the same
-            activity_name = "Walking"
-        save_name = "{0}_{1}-{2}.gpx".format( row["Start Time"][:10], activity_name, row["Location Name"] )
+    for idx, row in activities.iterrows():
+        gpx_downloaded = [i for i in gpxfiles if (str(row["Activity ID"]) in i)][0]
+        add_garminID_gpx(gpx_downloaded,str(row["Activity ID"]))
+        activity_type = row["Activity Type"]
+        save_name = "{0}_{1}.gpx".format( row["Start Time"][:10], row["Activity Name"].replace(' ', '-').lower() )
+        if not os.path.isdir( os.path.join( gpxtrack_folder, activity_type ) ):
+            os.mkdir( os.path.join( gpxtrack_folder, activity_type ) )
+        gpx_new = os.path.join( gpxtrack_folder, activity_type, save_name )
+        # check if gpx_new allready exists (can happen if multiple activities of the same type occur at the same place at the same day), and if it does, add an index.
+        filename, extension = os.path.splitext(gpx_new)
+        counter = 1
+        while os.path.exists( gpx_new ):
+            # gpx_new = filename + " (" + str(counter) + ")" + extension
+            gpx_new = "{0}_{1}{2}".format(filename,counter,extension)
+            counter += 1
 
-        if not os.path.isdir( os.path.join( gpxtrack_folder, activity_name ) ):
-            os.mkdir( os.path.join( gpxtrack_folder, activity_name ) )
         shutil.copy2(
-            filepath,
-            os.path.join( gpxtrack_folder, activity_name, save_name)
+            gpx_downloaded,
+            gpx_new
         )
         # Okay done! Now, save the id of this file so I don't download it again
         id_list.append( str( row["Activity ID"] ) )
